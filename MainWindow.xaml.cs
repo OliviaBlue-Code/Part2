@@ -1,0 +1,421 @@
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
+using System.Windows.Shapes;
+
+namespace demo
+{//start of namespace
+
+    public partial class MainWindow : Window
+    {//start of class
+
+        //creating an instance for the class Array
+        ArrayList reply = new ArrayList();
+        ArrayList ignore = new ArrayList();
+        
+
+        // variables
+        string username = string.Empty;
+        string pre_question = string.Empty;
+        int counting = 0;
+
+
+
+        public MainWindow()
+        {
+            InitializeComponent();
+
+            new respond(reply, ignore) { };
+
+            //creating an instance for the class voice_greeting 
+            //with an object name greet
+            voice_greeting greet = new voice_greeting();
+
+            //call the voice method
+            greet.greet();
+        }
+
+            private void proceed(object sender, RoutedEventArgs e)
+            {
+                //Hide home page grid and set Username grid visible
+                home_grid.Visibility = Visibility.Hidden;
+                username_grid.Visibility = Visibility.Visible;
+            }
+
+            //submit name  event handler
+            private void submit_name(object sender, RoutedEventArgs e)
+            {
+                string input = usernames_input.Text.Trim();
+
+                //  Check name empty
+                if (string.IsNullOrWhiteSpace(input))
+                {
+                    MessageBox.Show("Name cannot be empty.");
+                    usernames_input.Clear();
+                    usernames_input.Focus();
+                    return;
+                }
+
+                //  Check name length
+                if (input.Length < 3)
+                {
+                    MessageBox.Show("Name must be at least 3 characters long.");
+                    usernames_input.Clear();
+                    usernames_input.Focus();
+                    return;
+                }
+
+                //  Check name for numbers using regex
+                if (!HasNoNumbers(input))
+                {
+                    MessageBox.Show("Numbers are not allowed in names.");
+                    usernames_input.Clear();
+                    usernames_input.Focus();
+                    return;
+                }
+
+                //  Check if returning user and save if new
+                bool isReturning = CheckNameExists(input);
+                if (!isReturning)
+                {
+                    SaveName(input);
+                }
+
+                username = input;
+
+                //Hide username page grid and set chats grid visible
+                username_grid.Visibility = Visibility.Hidden;
+                chat_grid.Visibility = Visibility.Visible;
+
+                // Greeting
+                if (isReturning)
+                    error_method("ChatBot", $"Welcome back {username}!");
+                else
+                    error_method("ChatBot", $"Hey {username}, welcome to AI cybersecurity");
+            }
+
+            // KeyDown handler for username input - allows Enter to submit
+            private void usernames_input_KeyDown(object sender, KeyEventArgs e)
+            {
+                if (e.Key == Key.Enter)
+                {
+                    // Trigger the same logic as clicking Submit Username
+                    submit_name(this, new RoutedEventArgs());
+                    e.Handled = true;
+                }
+            }
+
+            //send event handler
+            private void send(object sender, RoutedEventArgs e)
+            {
+                // Get the question from the design and sanitize it
+                string Question = question.Text.ToString().Trim();
+
+                if (string.IsNullOrWhiteSpace(Question))
+                {
+                    error_method("ChatBot", "Please enter a question.");
+                    return;
+                }
+
+                // Remove special characters and clean the question
+                string questions = RemoveSpecialCharacters(Question);
+
+                // Show what the user typed 
+                error_method(username, Question);
+
+                //ai chats and auto_show_interest
+                auto_show_interest();
+                ai_check(questions);
+            }
+
+            // Regex method - no numbers allowed
+            public bool HasNoNumbers(string input)
+            {
+                return Regex.IsMatch(input, @"^\D+$");
+            }
+
+            private bool CheckNameExists(string name)
+            {
+                string filename = "user_names.txt";
+
+                if (!File.Exists(filename))
+                {
+                    File.WriteAllText(filename, "");
+                    return false;
+                }
+
+                string[] names = File.ReadAllLines(filename);
+                foreach (string name_found in names)
+                {
+                    if (name_found.Trim().Equals(name, StringComparison.OrdinalIgnoreCase))
+                        return true;
+                }
+                return false;
+            }
+
+            private void SaveName(string name)
+            {
+                string filename = "user_names.txt";
+                File.AppendAllText(filename, name + Environment.NewLine);
+            }
+
+            //end for the username submit
+
+            //start of ai_chat method
+            private void ai_check(string questions)
+        {
+            if (string.IsNullOrWhiteSpace(questions))
+            {
+                error_method("ChatBot", "Please enter a valid question.");
+                question.Clear();
+                return;
+            }
+
+            questions = questions.ToLower();
+            string[] words = questions.Split(' ');
+
+            string emotionReply = null;
+            List<string> topicReplies = new List<string>();
+
+            // 1. Check for emotions first
+            string[] emotions = { "frustrated", "angry", "confused", "sad", "happy", "excited", "worried" };
+            foreach (string word in words)
+            {
+                if (emotions.Contains(word))
+                {
+                    foreach (string answerStr in reply)
+                    {
+                        if (answerStr.StartsWith(word + " "))
+                        {
+                            emotionReply = answerStr.Substring(word.Length + 1);
+                            break;
+                        }
+                    }
+                    if (emotionReply != null) break;
+                }
+            }
+
+            // Check for greetings - only if input is just greeting words
+            string[] greetings = { "hello", "hi", "hey", "good morning", "good evening", "good day" };
+            bool onlyGreeting = true;
+
+            foreach (string word in words)
+            {
+                bool isGreetingWord = false;
+                foreach (string g in greetings)
+                {
+                    if (word.Equals(g))
+                    {
+                        isGreetingWord = true;
+                        break;
+                    }
+                }
+                // If word is not a greeting and not ignored, then it's not "only greeting"
+                if (isGreetingWord == false)
+                {
+                    bool isIgnored = false;
+                    foreach (string ignoreWord in ignore)
+                    {
+                        if (word.Equals(ignoreWord))
+                        {
+                            isIgnored = true;
+                            break;
+                        }
+                    }
+                    if (isIgnored == false)
+                    {
+                        onlyGreeting = false;
+                        break;
+                    }
+                }
+            }
+
+            if (onlyGreeting == true)
+            {
+                topicReplies.Add("Hey! Ask me about passwords, phishing, malware, encryption, 2FA, or ransomware.");
+            }
+
+            // 3. Check for cyber topic keywords
+            foreach (string word in words)
+            {
+                foreach (string answerStr in reply)
+                {
+                    string[] parts = answerStr.Split(' ');
+                    string keyword = parts[0].ToLower();
+                    if (word == keyword && !emotions.Contains(word) && !greetings.Contains(word))
+                    {
+                        string responseText = string.Join(" ", parts.Skip(1));
+                        topicReplies.Add(responseText);
+                    }
+                }
+            }
+
+            //  emotion first, then topics
+            Random random = new Random();
+            List<string> responsesToSend = new List<string>();
+            if (emotionReply != null)
+                responsesToSend.Add(emotionReply);
+
+            // Pick only 1 random reply from topicReplies
+            if (topicReplies.Count > 0)
+            {
+                int index = random.Next(0, topicReplies.Count);
+                responsesToSend.Add(topicReplies[index]);
+            }
+
+            // 5. Output result - now only 1 line
+            if (responsesToSend.Count > 0)
+            {
+                string finalMessage = string.Join("\n\n", responsesToSend);
+                error_method("ChatBot", finalMessage);
+            }
+            else
+            {
+                string[] fallbackMessages = {
+        "Hmm, I'm not sure I got that. Try asking me about phishing, passwords, or malware.",
+        "I didn't catch that. What part of cybersecurity do you want to talk about?",
+        "Mind rephrasing that? I'm still learning."
+    };
+                error_method("ChatBot", fallbackMessages[random.Next(fallbackMessages.Length)]);
+                question.Clear();
+            }
+            question.Clear();
+        }
+        //end of ai_chat method
+
+        //method to remove special characters
+        private string RemoveSpecialCharacters(string input)
+            {
+       
+            if (string.IsNullOrWhiteSpace(input))
+                return string.Empty;
+
+            StringBuilder sanitized = new StringBuilder();
+            int i = 0;
+
+            while (i < input.Length)
+            {
+                string ch = input.Substring(i, 1);
+
+                if (Regex.IsMatch(ch, "[a-zA-Z0-9\\s'\\-]"))
+                {
+                    sanitized.Append(ch);
+                }
+                else
+                {
+                    sanitized.Append(" ");
+                }
+                i = i + 1;
+            }
+
+            string result = sanitized.ToString();
+            result = Regex.Replace(result, "\\s+", " ").Trim();
+            return result;
+        
+            }
+            //end of method to remove special characters
+
+            //method count to show interests randomly
+            private void auto_show_interest()
+            {
+                if (counting == 3)
+                {
+                    string filename = "interested_topic.txt";
+
+                    if (File.Exists(filename))
+                    {
+                        string[] lines = File.ReadAllLines(filename);
+
+                        foreach (string line in lines)
+                        {
+                            if (line.StartsWith(username))
+                            {
+                                int colonIndex = line.IndexOf("interested in:");
+                                if (colonIndex >= 0)
+                                {
+                                    string interests = line.Substring(colonIndex + 14).Trim();
+                                    error_method("ChatBot", "I remember you're interested in" + interests + " and ");
+                                    ai_check(interests);
+                                    break;
+                                }
+                            }
+                        }
+                    }
+
+                    counting = 0;
+                }
+                else
+                {
+                    counting += 1;
+                }
+            }
+            //end of count interest method
+
+            // Updated error method with better formatting
+            private void error_method(string name, string message)
+            {
+                Border messageBorder = new Border
+                {
+                    Margin = new Thickness(0, 2, 0, 2),
+                    Padding = new Thickness(5, 3, 5, 3),
+                    CornerRadius = new CornerRadius(5)
+                };
+
+                if (name.ToLower().Contains("chatbot") || name.ToLower().Contains("chat"))
+                {
+                    messageBorder.Background = new SolidColorBrush(Color.FromRgb(240, 248, 255));
+                    messageBorder.BorderBrush = new SolidColorBrush(Color.FromRgb(173, 216, 230));
+                }
+                else
+                {
+                    messageBorder.Background = new SolidColorBrush(Color.FromRgb(245, 245, 245));
+                    messageBorder.BorderBrush = new SolidColorBrush(Color.FromRgb(211, 211, 211));
+                }
+                messageBorder.BorderThickness = new Thickness(1);
+
+                TextBlock messageText = new TextBlock
+                {
+                    TextWrapping = TextWrapping.Wrap,
+                    Margin = new Thickness(2)
+                };
+
+                Brush nameColor = (name.ToLower().Contains("chatbot") || name.ToLower().Contains("chat")) ?
+                                  Brushes.DarkBlue : Brushes.DarkGreen;
+
+                Brush messageColor = Brushes.Black;
+
+                messageText.Inlines.Add(new Run
+                {
+                    Text = name + ": ",
+                    Foreground = nameColor,
+                    FontWeight = FontWeights.Bold
+                });
+
+                messageText.Inlines.Add(new Run
+                {
+                    Text = message,
+                    Foreground = messageColor
+                });
+
+                messageBorder.Child = messageText;
+                chats.Items.Add(messageBorder);
+
+                chats.ScrollIntoView(chats.Items[chats.Items.Count - 1]);
+            }//end of error method
+
+        }//end of class
+    }//end of namespace
+
