@@ -1,0 +1,301 @@
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
+using System.Windows.Shapes;
+
+namespace demo
+{//start of namespace
+
+    public partial class MainWindow : Window
+    {//start of class
+
+        //instance of respond class
+        ArrayList reply = new ArrayList();
+        ArrayList ignore = new ArrayList();        
+        string username = string.Empty;
+        int counting = 0;
+        
+
+
+        public MainWindow()
+        {
+            InitializeComponent();
+
+            new respond(reply, ignore) { };
+            // Part 2: Test images load with try-catch
+            try
+            {
+                var test = new BitmapImage(new Uri("Images/aibackground.jpg", UriKind.Relative));
+            }
+            catch
+            {
+                MessageBox.Show("Warning: Images missing. Put aibackground.jpg in /Images folder");
+            }
+
+            // Voice greeting with error handling
+            try
+            {
+                voice_greeting greet = new voice_greeting();
+                greet.greet();
+            }
+            catch { }
+        }
+    
+            private void proceed(object sender, RoutedEventArgs e)
+            {
+                home_grid.Visibility = Visibility.Hidden;
+                username_grid.Visibility = Visibility.Visible;
+            }
+
+            private void submit_name(object sender, RoutedEventArgs e)
+            {
+                try
+                {
+                    string input = usernames_input.Text.Trim();
+
+                    if (string.IsNullOrWhiteSpace(input))
+                    {
+                        MessageBox.Show("Name cannot be empty.");
+                        usernames_input.Clear();
+                        usernames_input.Focus();
+                        return;
+                    }
+
+                    if (input.Length < 3)
+                    {
+                        MessageBox.Show("Name must be at least 3 characters long.");
+                        usernames_input.Clear();
+                        usernames_input.Focus();
+                        return;
+                    }
+
+                    if (!HasNoNumbers(input))
+                    {
+                        MessageBox.Show("Numbers are not allowed in names.");
+                        usernames_input.Clear();
+                        usernames_input.Focus();
+                        return;
+                    }
+
+                    bool isReturning = CheckNameExists(input);
+                    if (!isReturning)
+                    {
+                        SaveName(input);
+                    }
+
+                    username = input;
+                    username_grid.Visibility = Visibility.Hidden;
+                    chat_grid.Visibility = Visibility.Visible;
+
+                    if (isReturning)
+                        error_method("ChatBot", $"Welcome back {username}!");
+                    else
+                        error_method("ChatBot", $"Hey {username}, welcome to AEGISNODE AI");
+                }
+                catch (IOException ex)
+                {
+                    MessageBox.Show("File error: " + ex.Message);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error: " + ex.Message);
+                }
+            }
+
+            private void usernames_input_KeyDown(object sender, KeyEventArgs e)
+            {
+                if (e.Key == Key.Enter)
+                {
+                    submit_name(this, new RoutedEventArgs());
+                    e.Handled = true;
+                }
+            }
+
+            private void send(object sender, RoutedEventArgs e)
+            {
+                try
+                {
+                    string Question = question.Text.Trim();
+
+                    if (string.IsNullOrWhiteSpace(Question))
+                    {
+                        error_method("ChatBot", "Please enter a question.");
+                        return;
+                    }
+
+                    string questions = RemoveSpecialCharacters(Question);
+                    error_method(username, Question);
+
+                    auto_show_interest();
+                    ai_check(questions);
+                }
+                catch (Exception ex)
+                {
+                    error_method("ChatBot", "Send error: " + ex.Message);
+                }
+            }
+
+            public bool HasNoNumbers(string input)
+            {
+                return Regex.IsMatch(input, @"^\D+$");
+            }
+
+            private bool CheckNameExists(string name)
+            {
+                try
+                {
+                    string filename = "user_names.txt";
+                    if (!File.Exists(filename))
+                    {
+                        File.WriteAllText(filename, "");
+                        return false;
+                    }
+                    string[] names = File.ReadAllLines(filename);
+                    return names.Any(n => n.Trim().Equals(name, StringComparison.OrdinalIgnoreCase));
+                }
+                catch
+                {
+                    return false;
+                }
+            }
+
+            private void SaveName(string name)
+            {
+                try
+                {
+                    File.AppendAllText("user_names.txt", name + Environment.NewLine);
+                }
+                catch (IOException ex)
+                {
+                    MessageBox.Show("Could not save name: " + ex.Message);
+                }
+            }
+
+            // Part 2: Rewritten with Dictionary + try-catch + logging
+            private void ai_check(string questions)
+            {
+                try
+                {
+                    if (string.IsNullOrWhiteSpace(questions))
+                    {
+                        error_method("ChatBot", "Please enter a valid question.");
+                        return;
+                    }
+
+                    // Part 2: Dictionary lookup instead of ArrayList loop
+                    string reply = chat.GetResponse(questions);
+                    error_method("ChatBot", reply);
+
+                    // Part 2 requirement: Log chat to text file
+                    File.AppendAllText("chatlog.txt", $"[{DateTime.Now}] {username}: {questions}\nBot: {reply}\n\n");
+                }
+                catch (IOException)
+                {
+                    error_method("ChatBot", "Could not save chat history.");
+                }
+                catch (Exception ex)
+                {
+                    error_method("ChatBot", "Error: " + ex.Message);
+                }
+                finally
+                {
+                    question.Clear();
+                }
+            }
+
+            private string RemoveSpecialCharacters(string input)
+            {
+                if (string.IsNullOrWhiteSpace(input))
+                    return string.Empty;
+
+                string result = Regex.Replace(input, @"[^a-zA-Z0-9\s'-]", " ");
+                result = Regex.Replace(result, @"\s+", " ").Trim();
+                return result;
+            }
+
+            private void auto_show_interest()
+            {
+                try
+                {
+                    if (counting == 3)
+                    {
+                        string filename = "interested_topic.txt";
+                        if (File.Exists(filename))
+                        {
+                            string[] lines = File.ReadAllLines(filename);
+                            foreach (string line in lines)
+                            {
+                                if (line.StartsWith(username, StringComparison.OrdinalIgnoreCase))
+                                {
+                                    int colonIndex = line.IndexOf("interested in:");
+                                    if (colonIndex >= 0)
+                                    {
+                                        string interests = line.Substring(colonIndex + 14).Trim();
+                                        error_method("ChatBot", "I remember you're interested in " + interests);
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                        counting = 0;
+                    }
+                    else
+                    {
+                        counting++;
+                    }
+                }
+                catch { }
+            }
+
+            private void error_method(string name, string message)
+            {
+                try
+                {
+                    Border messageBorder = new Border
+                    {
+                        Margin = new Thickness(0, 2, 0, 2),
+                        Padding = new Thickness(5, 3, 5, 3),
+                        CornerRadius = new CornerRadius(5)
+                    };
+
+                    if (name.ToLower().Contains("chatbot"))
+                    {
+                        messageBorder.Background = new SolidColorBrush(Color.FromRgb(240, 248, 255));
+                        messageBorder.BorderBrush = new SolidColorBrush(Color.FromRgb(173, 216, 230));
+                    }
+                    else
+                    {
+                        messageBorder.Background = new SolidColorBrush(Color.FromRgb(245, 245, 245));
+                        messageBorder.BorderBrush = new SolidColorBrush(Color.FromRgb(211, 211, 211));
+                    }
+                    messageBorder.BorderThickness = new Thickness(1);
+
+                    TextBlock messageText = new TextBlock { TextWrapping = TextWrapping.Wrap, Margin = new Thickness(2) };
+                    Brush nameColor = name.ToLower().Contains("chatbot") ? Brushes.DarkBlue : Brushes.DarkGreen;
+
+                    messageText.Inlines.Add(new Run { Text = name + ": ", Foreground = nameColor, FontWeight = FontWeights.Bold });
+                    messageText.Inlines.Add(new Run { Text = message, Foreground = Brushes.Black });
+
+                    messageBorder.Child = messageText;
+                    chats.Items.Add(messageBorder);
+                    chats.ScrollIntoView(chats.Items[chats.Items.Count - 1]);
+                }
+                catch { }
+            }
+        
+}//end of class
+    }//end of namespace
+
