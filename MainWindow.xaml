@@ -3,92 +3,181 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="MainWindow" Height="400" Width="700">
     <Grid>
+        
+            <Grid.Background>
+                <ImageBrush ImageSource="/aibackground.jpg"/>
+            </Grid.Background>
 
-        <Grid.Background>
-            <ImageBrush ImageSource="/aibackground.jpg"/>
-        </Grid.Background>
-
-
-        <Grid x:Name="home_grid"
-              Visibility="Visible">
-            <Image Source="/AImage.jpg" 
-                   Height="200" 
-                   Width="400" 
-                   Margin="0,20,0,100"
-                   />
-            
-            <TextBlock Text="Welcome to AEGISNODE, click continue button"
-                       Height="20" 
-                       Width="270" 
-                       TextAlignment="Center" 
-                       Margin="0,200,0,0"
-                       FontFamily="Arial Rounded MT Bold"/>
-            
-            <Button Height="40"
-                    Width="100" 
-                    Margin="0,300,0,0" 
-                    Background="Azure"
-                    Content="Proceed"
-                    Click="proceed"/>
-        </Grid>
-
-        <!-- USERNAME GRID - CENTERED -->
-        <Grid x:Name="username_grid"
-              Visibility="Hidden">
-            
-            <StackPanel 
-                HorizontalAlignment="Center"
-                VerticalAlignment="Center" 
-                Width="300">
-                <Image Source="/logo.png" 
-                       Height="150"
-                       Width="200"
-                       Margin="0,0,0,20"/>
-
-                <TextBlock Text="Enter username" 
-                           Height="20" 
-                           TextAlignment="Center"
-                           FontFamily="Arial Rounded MT Bold"
-                           Margin="0,0,0,10"/>
-
-               <TextBox x:Name="usernames_input" 
-                          KeyDown="usernames_input_KeyDown"
-                          Height="40" 
-                          TextAlignment="Center" 
-                          FontFamily="Arial Rounded MT Bold"
-                          Margin="0,0,0,10"/>
+            <!-- 1. HOME GRID -->
+            <Grid x:Name="home_grid" 
+                  Visibility="Visible">
+                <Image Source="/AImage.jpg" 
+                       Height="200" 
+                       Width="400" 
+                       Margin="0,20,0,100"/>
                 
-                <TextBlock x:Name="errorTextBlock"
-                           Height="20" 
-                           TextAlignment="Center"
-                           Foreground="Red"
-                           FontFamily="Arial Rounded MT Bold" Margin="0,0,0,10"/>
-
+                <TextBlock Text="Welcome to AEGISNODE" 
+                           Height="20"
+                           Width="270"
+                           TextAlignment="Center" 
+                           Margin="0,200,0,0" 
+                           FontFamily="Arial Rounded MT Bold"/>
                 
-
                 <Button Height="40"
-                        Content="Submit Username"
-                        Click="submit_name"/>
-            </StackPanel>
-        </Grid>
+                        Width="100" 
+                        Margin="0,300,0,0" 
+                        Background="Azure" 
+                        Content="Proceed" 
+                        Click="proceed"/>
+            </Grid>
 
-        <Grid x:Name="chat_grid" 
-              Visibility="Collapsed">
-            <ListView x:Name="chats"
-                      Height="300" 
-                      Margin="0,0,0,120"/>
-            
-            <TextBox x:Name="question"
-                     Height="50"
-                     Width="450"
-                     Margin="20,300,300,0"/>
-            
-            <Button Height="50"
-                    Width="200"
-                    Margin="450,300,0,0"
-                    Content="Send" 
-                    Click="send"/>
-        </Grid>
+            <!-- USERNAME GRID -->
+            <Grid x:Name="username_grid" 
+                  Visibility="Hidden">
+                <StackPanel HorizontalAlignment="Center"
+                            VerticalAlignment="Center" Width="300">
+                    <Image Source="/logo.png" 
+                           Height="150" Width="200" 
+                           Margin="0,0,0,20"/>
+                    <TextBlock Text="Enter username" 
+                               Height="20" 
+                               TextAlignment="Center" 
+                               FontFamily="Arial Rounded MT Bold" 
+                               Margin="0,0,0,10"/>
+                    
+                    <TextBox x:Name="usernames_input" 
+                             KeyDown="usernames_input_KeyDown"
+                             Height="40" 
+                             TextAlignment="Center" 
+                             FontFamily="Arial Rounded MT Bold"
+                             Margin="0,0,0,10"/>
+                    
+                    <TextBlock x:Name="errorTextBlock" 
+                               Height="20" 
+                               TextAlignment="Center" 
+                               Foreground="Red" 
+                               FontFamily="Arial Rounded MT Bold"
+                               Margin="0,0,0,10"/>
+                    
+                    <Button Height="40" 
+                            Content="Submit Username" 
+                            Click="submit_name"/>
+                </StackPanel>
+                
+            </Grid>
 
-    </Grid>
+            <!--  MENU GRID = NEW -->
+            <Grid x:Name="menu_grid"
+                  Visibility="Hidden">
+                <StackPanel HorizontalAlignment="Center" 
+                            VerticalAlignment="Center" Width="300">
+                    <TextBlock Text="Welcome, " 
+                               x:Name="MenuWelcome" 
+                               FontSize="18" 
+                               FontWeight="Bold" 
+                               Margin="0,0,0,20"
+                               HorizontalAlignment="Center"/>
+                    
+                    <Button Height="50" 
+                            Content="Start AI Chat" 
+                            Click="StartChat_Click"
+                            Margin="0,0,0,10"/>
+                    
+                    <Button Height="50"
+                            Content="Start Cybersecurity Quiz" 
+                            Click="StartQuiz_Click"/>
+                </StackPanel>
+            </Grid>
+
+            <!--  CHAT GRID -->
+            <Grid x:Name="chat_grid" 
+                  Visibility="Collapsed">
+                <ListView x:Name="chats"
+                          Height="300" 
+                          Margin="0,0,0,120"/>
+                
+                <TextBox x:Name="question"
+                         Height="50" 
+                         Width="450" 
+                         Margin="20,300,300,0"/>
+                
+                <Button Height="50" 
+                        Width="200" 
+                        Margin="450,300,0,0" 
+                        Content="Send" Click="send"/>
+                
+                <Button Height="30" 
+                        Width="100" 
+                        Margin="600,10,0,0" 
+                        Content="Back to Menu" 
+                        Click="BackToMenu_Click" 
+                        VerticalAlignment="Top" 
+                        HorizontalAlignment="Right"/>
+            </Grid>
+
+            <!--  QUIZ GRID = NEW -->
+            <Grid x:Name="quiz_grid" Visibility="Hidden">
+                <StackPanel Margin="30,30,30,30">
+                    <TextBlock x:Name="QuizScoreText" 
+                               FontSize="16" 
+                               FontWeight="Bold" 
+                               HorizontalAlignment="Right" 
+                               Text="Score: 0/12"/>
+                    
+                    <TextBlock x:Name="QuestionText" 
+                               FontSize="18" 
+                               FontWeight="Bold" 
+                               Margin="0,20,0,20" 
+                               TextWrapping="Wrap" 
+                               MinHeight="60"/>
+                    
+                    <Button x:Name="BtnA" 
+                            Height="40" 
+                            Margin="0,5" 
+                            Click="Answer_Click" 
+                            Tag="A" Visibility="Collapsed"/>
+                    
+                    
+                    
+                    <Button x:Name="BtnB" 
+                            Height="40" 
+                            Margin="0,5" 
+                            Click="Answer_Click" 
+                            Tag="B" Visibility="Collapsed"/>
+                    
+                    <Button x:Name="BtnC" 
+                            Height="40" 
+                            Margin="0,5" 
+                            Click="Answer_Click" 
+                            Tag="C" 
+                            Visibility="Collapsed"/>
+                    
+                    <Button x:Name="BtnD" Height="40"
+                            Margin="0,5" 
+                            Click="Answer_Click" 
+                            Tag="D" Visibility="Collapsed"/>
+                    
+                    <Button x:Name="BtnTrue" 
+                            Height="40" Margin="0,5" 
+                            Content="True" 
+                            Click="Answer_Click" 
+                            Tag="True" Visibility="Collapsed"/>
+                    
+                    <Button x:Name="BtnFalse"
+                            Height="40" 
+                            Margin="0,5" 
+                            Content="False" 
+                            Click="Answer_Click" 
+                            Tag="False" Visibility="Collapsed"/>
+                    
+                    <Button Height="30" 
+                            Width="100" 
+                            Content="Back to Menu" 
+                            Click="BackToMenu_Click" 
+                            Margin="0,20,0,0" 
+                            HorizontalAlignment="Right"/>
+                </StackPanel>
+            </Grid>
+        </Grid>
+    
 </Window>
