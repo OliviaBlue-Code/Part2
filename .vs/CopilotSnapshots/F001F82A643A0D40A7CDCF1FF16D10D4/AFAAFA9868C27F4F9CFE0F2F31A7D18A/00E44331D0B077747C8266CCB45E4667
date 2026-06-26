@@ -1,0 +1,102 @@
+﻿using Microsoft.Data.SqlClient;
+using System;
+using System.Collections.Generic;
+using System.Windows.Controls;
+
+namespace demo
+{
+    public class TasksRepo
+    {
+        // Match your screenshot: SQLEXPRESS25 + prog_tasks
+        public readonly string connection =
+           @"Data Source=OLIVIABLUE\SQLEXPRESS25;
+             Initial Catalog=prog_tasks;
+             Integrated Security=True";
+
+        public TasksRepo() { }
+
+        // XAML.cs calls: repo.AddTask(currentUser, title, date)
+        public void AddTask(string username, string title, DateTime? reminderDate)
+        {
+            using (SqlConnection conn = new SqlConnection(connection))
+            {
+                conn.Open();
+                // Map to your DB: demo_tasks(task_name, task_description, task_dueDate, task_status)
+                string query = @"INSERT INTO demo_tasks(task_name, task_description, task_dueDate, task_status) 
+                                 VALUES(@Title, @Description, @DueDate, 'pending')";
+                SqlCommand command = new SqlCommand(query, conn);
+                command.Parameters.AddWithValue("@Title", title);
+                command.Parameters.AddWithValue("@Description", title);
+                command.Parameters.AddWithValue("@DueDate", reminderDate?.ToString("yyyy-MM-dd") ?? (object)DBNull.Value);
+                command.ExecuteNonQuery();
+            }
+        }
+
+        // XAML.cs calls: repo.GetTasks(currentUser) -> List<CyberTask>
+        public List<CyberTask> GetTasks(string username)
+        {
+            List<CyberTask> tasks = new List<CyberTask>();
+            using (SqlConnection conn = new SqlConnection(connection))
+            {
+                conn.Open();
+                string query = "SELECT task_id, task_name, task_description, task_dueDate, task_status FROM demo_tasks ORDER BY task_id DESC";
+                SqlCommand cmd = new SqlCommand(query, conn);
+                SqlDataReader reader = cmd.ExecuteReader();
+                while (reader.Read())
+                {
+                    tasks.Add(new CyberTask
+                    {
+                        TaskId = Convert.ToInt32(reader["task_id"]),
+                        Title = reader["task_name"].ToString(),
+                        Description = reader["task_description"].ToString(),
+                        Username = username, // Your DB doesn't have Username yet, so we set it here
+                        ReminderDate = reader["task_dueDate"] == DBNull.Value ? null : DateTime.Parse(reader["task_dueDate"].ToString()),
+                        IsCompleted = reader["task_status"].ToString().ToLower() == "done"
+                    });
+                }
+            }
+            return tasks;
+        }
+
+        // XAML.cs calls: repo.DeleteTask(taskId)
+        public void DeleteTask(int taskId)
+        {
+            using (SqlConnection conn = new SqlConnection(connection))
+            {
+                conn.Open();
+                SqlCommand cmd = new SqlCommand("DELETE FROM demo_tasks WHERE task_id = @TaskId", conn);
+                cmd.Parameters.AddWithValue("@TaskId", taskId);
+                cmd.ExecuteNonQuery();
+            }
+        }
+
+        // Keep for your old Reminders tab
+        public void load_tasks(ListView view_tasks)
+        {
+            view_tasks.Items.Clear();
+            using (SqlConnection conn = new SqlConnection(connection))
+            {
+                conn.Open();
+                var cmd = new SqlCommand("SELECT task_id, task_name, task_dueDate, task_status FROM demo_tasks", conn);
+                var rdr = cmd.ExecuteReader();
+                while (rdr.Read())
+                {
+                    string status = rdr["task_status"].ToString().ToUpper();
+                    string date = rdr["task_dueDate"] == DBNull.Value ? "No date" : DateTime.Parse(rdr["task_dueDate"].ToString()).ToString("dd MMM");
+                    view_tasks.Items.Add($"{rdr["task_id"]}: {rdr["task_name"]} | {date} | {status}");
+                }
+            }
+        }
+
+        public void update_taskStatus(int taskId)
+        {
+            using (SqlConnection conn = new SqlConnection(connection))
+            {
+                conn.Open();
+                SqlCommand cmd = new SqlCommand("UPDATE demo_tasks SET task_status='done' WHERE task_id=@TaskId", conn);
+                cmd.Parameters.AddWithValue("@TaskId", taskId);
+                cmd.ExecuteNonQuery();
+            }
+        }
+    }
+}

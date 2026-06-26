@@ -1,0 +1,138 @@
+﻿using Microsoft.Data.SqlClient;
+using System;
+using System.Collections.Generic;
+using System.Windows.Controls;
+
+namespace demo
+{
+    public class TaskItem // Matches what XAML.cs uses in foreach
+    {
+        public int TaskId { get; set; }
+        public string Title { get; set; } = "";
+        public DateTime? ReminderDate { get; set; }
+        public bool IsCompleted { get; set; }
+    }
+
+    public class TasksRepo // Rename your `tasks` class to this
+    {
+        public readonly string connection =
+            @"Data Source=(localdb)\MSSQLLocalDB;
+              Initial Catalog=mockTaskdb;
+              Integrated Security=True";
+
+        public TasksRepo()
+        {
+            CreateTableIfNotExists(); // Auto-create DB on first run
+        }
+
+        public void CreateTableIfNotExists()
+        {
+            using (SqlConnection conn = new SqlConnection(connection))
+            {
+                conn.Open();
+                string sql = @"
+                IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='Tasks' and xtype='U')
+                CREATE TABLE Tasks(
+                    TaskId int identity(1,1) primary key,
+                    Username nvarchar(100) not null,
+                    Title varchar(100) not null,
+                    description varchar(255) not null,
+                    reminderDate datetime null,
+                    IsCompleted bit default 0
+                )";
+                new SqlCommand(sql, conn).ExecuteNonQuery();
+            }
+        }
+
+        // XAML.cs calls: repo.AddTask(currentUser, title, date)
+        public void AddTask(string username, string title, DateTime? reminderDate)
+        {
+            using (SqlConnection conn = new SqlConnection(connection))
+            {
+                conn.Open();
+                string query = @"INSERT INTO Tasks(Username, Title, description, reminderDate)
+                                 VALUES(@Username, @Title, @Description, @ReminderDate)";
+                SqlCommand command = new SqlCommand(query, conn);
+                command.Parameters.AddWithValue("@Username", username);
+                command.Parameters.AddWithValue("@Title", title);
+                command.Parameters.AddWithValue("@Description", title); // Use title for desc to keep it simple
+                command.Parameters.AddWithValue("@ReminderDate", (object)reminderDate ?? DBNull.Value);
+                command.ExecuteNonQuery();
+            }
+        }
+
+        // XAML.cs calls: repo.GetTasks(currentUser)
+        public List<TaskItem> GetTasks(string username)
+        {
+            List<TaskItem> tasks = new List<TaskItem>();
+            using (SqlConnection conn = new SqlConnection(connection))
+            {
+                conn.Open();
+                string query = "SELECT TaskId, Title, reminderDate, IsCompleted FROM Tasks WHERE Username=@Username ORDER BY TaskId DESC";
+                SqlCommand cmd = new SqlCommand(query, conn);
+                cmd.Parameters.AddWithValue("@Username", username);
+                SqlDataReader reader = cmd.ExecuteReader();
+                while (reader.Read())
+                {
+                    tasks.Add(new TaskItem
+                    {
+                        TaskId = Convert.ToInt32(reader["TaskId"]),
+                        Title = reader["Title"].ToString(),
+                        ReminderDate = reader["reminderDate"] == DBNull.Value ? (DateTime?)null : Convert.ToDateTime(reader["reminderDate"]),
+                        IsCompleted = Convert.ToBoolean(reader["IsCompleted"])
+                    });
+                }
+            }
+            return tasks;
+        }
+
+        // XAML.cs calls: repo.DeleteTask(taskId)
+        public void DeleteTask(int taskId)
+        {
+            using (SqlConnection conn = new SqlConnection(connection))
+            {
+                conn.Open();
+                var cmd = new SqlCommand("DELETE FROM Tasks WHERE TaskId = @TaskId", conn);
+                cmd.Parameters.AddWithValue("@TaskId", taskId);
+                cmd.ExecuteNonQuery();
+            }
+        }
+
+        // Your old ListView code used this. Keep it so your Reminders page still works
+        public void load_tasks(ListView view_tasks)
+        {
+            view_tasks.Items.Clear();
+            using (SqlConnection conn = new SqlConnection(connection))
+            {
+                conn.Open();
+                var cmd = new SqlCommand("SELECT TaskId, Title, reminderDate, IsCompleted FROM Tasks", conn);
+                var rdr = cmd.ExecuteReader();
+                while (rdr.Read())
+                {
+                    string status = Convert.ToBoolean(rdr["IsCompleted"]) ? "DONE" : "PENDING";
+                    string date = rdr["reminderDate"] == DBNull.Value ? "No date" : Convert.ToDateTime(rdr["reminderDate"]).ToString("dd MMM");
+                    view_tasks.Items.Add($"{rdr["TaskId"]}: {rdr["Title"]} | {date} | {status}");
+                }
+            }
+        }
+
+        public void update_taskStatus(int taskId) // For double-click = mark done
+        {
+            using (SqlConnection conn = new SqlConnection(connection))
+            {
+                conn.Open();
+                var cmd = new SqlCommand("UPDATE Tasks SET IsCompleted=1 WHERE TaskId=@TaskId", conn);
+                cmd.Parameters.AddWithValue("@TaskId", taskId);
+                cmd.ExecuteNonQuery();
+            }
+        }
+
+        public void delete_task(int taskId) => DeleteTask(taskId); // Alias for your old name
+        public void insert_task(string n, string d, string dt, string s) // Alias for your old name
+        {
+            DateTime dtParsed;
+            DateTime? date = DateTime.TryParse(dt, out dtParsed) ? (DateTime?)dtParsed : null;
+            AddTask("default_user", n, date); // Your old code didn’t have username
+        }
+    }
+}

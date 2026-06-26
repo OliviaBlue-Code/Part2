@@ -1,0 +1,170 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\Shelby\\Downloads\\POEpart2 (3) (2)\\POEpart2\\demo\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{3DA24C76-45C2-475C-B65B-097D6138681A}|demo.csproj|c:\\users\\shelby\\downloads\\poepart2 (3) (2)\\poepart2\\demo\\tasksrepo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3DA24C76-45C2-475C-B65B-097D6138681A}|demo.csproj|solutionrelative:tasksrepo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3DA24C76-45C2-475C-B65B-097D6138681A}|demo.csproj|C:\\Users\\Shelby\\Downloads\\POEpart2 (3) (2)\\POEpart2\\demo\\mainwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3DA24C76-45C2-475C-B65B-097D6138681A}|demo.csproj|solutionrelative:mainwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3DA24C76-45C2-475C-B65B-097D6138681A}|demo.csproj|C:\\Users\\Shelby\\Downloads\\POEpart2 (3) (2)\\POEpart2\\demo\\cybertask.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3DA24C76-45C2-475C-B65B-097D6138681A}|demo.csproj|solutionrelative:cybertask.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3DA24C76-45C2-475C-B65B-097D6138681A}|demo.csproj|C:\\Users\\Shelby\\Downloads\\POEpart2 (3) (2)\\POEpart2\\demo\\respond.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3DA24C76-45C2-475C-B65B-097D6138681A}|demo.csproj|solutionrelative:respond.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3DA24C76-45C2-475C-B65B-097D6138681A}|demo.csproj|C:\\Users\\Shelby\\Downloads\\POEpart2 (3) (2)\\POEpart2\\demo\\mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{3DA24C76-45C2-475C-B65B-097D6138681A}|demo.csproj|solutionrelative:mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3DA24C76-45C2-475C-B65B-097D6138681A}|demo.csproj|C:\\Users\\Shelby\\Downloads\\POEpart2 (3) (2)\\POEpart2\\demo\\voice_greeting.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3DA24C76-45C2-475C-B65B-097D6138681A}|demo.csproj|solutionrelative:voice_greeting.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3DA24C76-45C2-475C-B65B-097D6138681A}|demo.csproj|C:\\Users\\Shelby\\Downloads\\POEpart2 (3) (2)\\POEpart2\\demo\\nlpprocessor.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3DA24C76-45C2-475C-B65B-097D6138681A}|demo.csproj|solutionrelative:nlpprocessor.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Shelby\\AppData\\Local\\Temp\\iq41mflu..sql||{CC5D8DF0-88F4-4BB2-9DBB-B48CEE65C30A}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Shelby\\AppData\\Local\\Temp\\iq41mflu..sql||{CC5D8DF0-88F4-4BB2-9DBB-B48CEE65C30A}|CodeFrame"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Shelby\\AppData\\Local\\Temp\\iq41mflu..sql||{CC5D8DF0-88F4-4BB2-9DBB-B48CEE65C30A}|ResultFrame"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 6,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:128:0:{75188d03-9892-4ae2-abf1-207126247ce5}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:128:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "SQLQuery1.sql ",
+              "DocumentMoniker": "C:\\Users\\Shelby\\AppData\\Local\\Temp\\iq41mflu..sql",
+              "RelativeDocumentMoniker": "..\\..\\..\\..\\AppData\\Local\\Temp\\iq41mflu..sql",
+              "ToolTip": "SQLQuery1.sql *",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000826|",
+              "WhenOpened": "2026-06-26T13:05:40.479Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "CyberTask.cs",
+              "DocumentMoniker": "C:\\Users\\Shelby\\Downloads\\POEpart2 (3) (2)\\POEpart2\\demo\\CyberTask.cs",
+              "RelativeDocumentMoniker": "CyberTask.cs",
+              "ToolTip": "C:\\Users\\Shelby\\Downloads\\POEpart2 (3) (2)\\POEpart2\\demo\\CyberTask.cs",
+              "RelativeToolTip": "CyberTask.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABIAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-27T21:06:13.928Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "respond.cs",
+              "DocumentMoniker": "C:\\Users\\Shelby\\Downloads\\POEpart2 (3) (2)\\POEpart2\\demo\\respond.cs",
+              "RelativeDocumentMoniker": "respond.cs",
+              "ToolTip": "C:\\Users\\Shelby\\Downloads\\POEpart2 (3) (2)\\POEpart2\\demo\\respond.cs",
+              "RelativeToolTip": "respond.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABEAAAALAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-25T21:47:03.356Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "TasksRepo.cs",
+              "DocumentMoniker": "C:\\Users\\Shelby\\Downloads\\POEpart2 (3) (2)\\POEpart2\\demo\\TasksRepo.cs",
+              "RelativeDocumentMoniker": "TasksRepo.cs",
+              "ToolTip": "C:\\Users\\Shelby\\Downloads\\POEpart2 (3) (2)\\POEpart2\\demo\\TasksRepo.cs",
+              "RelativeToolTip": "TasksRepo.cs",
+              "ViewState": "AgIAAHsAAAAAAAAAAAAiwDsAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-26T06:10:49.241Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "MainWindow.xaml",
+              "DocumentMoniker": "C:\\Users\\Shelby\\Downloads\\POEpart2 (3) (2)\\POEpart2\\demo\\MainWindow.xaml",
+              "RelativeDocumentMoniker": "MainWindow.xaml",
+              "ToolTip": "C:\\Users\\Shelby\\Downloads\\POEpart2 (3) (2)\\POEpart2\\demo\\MainWindow.xaml",
+              "RelativeToolTip": "MainWindow.xaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2026-05-25T13:20:31.318Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "voice_greeting.cs",
+              "DocumentMoniker": "C:\\Users\\Shelby\\Downloads\\POEpart2 (3) (2)\\POEpart2\\demo\\voice_greeting.cs",
+              "RelativeDocumentMoniker": "voice_greeting.cs",
+              "ToolTip": "C:\\Users\\Shelby\\Downloads\\POEpart2 (3) (2)\\POEpart2\\demo\\voice_greeting.cs",
+              "RelativeToolTip": "voice_greeting.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABgAAABBAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-26T00:47:13.899Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "NLPProcessor.cs",
+              "DocumentMoniker": "C:\\Users\\Shelby\\Downloads\\POEpart2 (3) (2)\\POEpart2\\demo\\NLPProcessor.cs",
+              "RelativeDocumentMoniker": "NLPProcessor.cs",
+              "ToolTip": "C:\\Users\\Shelby\\Downloads\\POEpart2 (3) (2)\\POEpart2\\demo\\NLPProcessor.cs",
+              "RelativeToolTip": "NLPProcessor.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAADQAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-26T06:32:17.003Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "MainWindow.xaml.cs",
+              "DocumentMoniker": "C:\\Users\\Shelby\\Downloads\\POEpart2 (3) (2)\\POEpart2\\demo\\MainWindow.xaml.cs",
+              "RelativeDocumentMoniker": "MainWindow.xaml.cs",
+              "ToolTip": "C:\\Users\\Shelby\\Downloads\\POEpart2 (3) (2)\\POEpart2\\demo\\MainWindow.xaml.cs",
+              "RelativeToolTip": "MainWindow.xaml.cs",
+              "ViewState": "AgIAADkBAAAAAAAAAAAiwGEBAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-25T13:20:30.728Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

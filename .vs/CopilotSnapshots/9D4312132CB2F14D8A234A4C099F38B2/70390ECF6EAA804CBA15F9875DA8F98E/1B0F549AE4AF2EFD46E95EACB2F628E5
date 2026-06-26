@@ -1,0 +1,143 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Data.SqlClient;
+
+namespace demo
+{
+    public class TaskItem
+    {
+        public int TaskId { get; set; }
+        public string Username { get; set; }
+        public string Title { get; set; }
+        public DateTime? ReminderDate { get; set; }
+    }
+
+    public class TasksRepo
+    {
+        // FIXED: Use AppDomain.CurrentDomain.BaseDirectory for WPF applications since |DataDirectory| is ASP.NET-specific
+        private readonly string _connectionString = $@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename={AppDomain.CurrentDomain.BaseDirectory}mockTaskdb.mdf;Integrated Security=True";
+        private bool _isDbInitialized = false;
+        private bool _dbInitializationFailed = false;
+
+        public TasksRepo() 
+        { 
+            // Don't initialize database in constructor to allow app startup even if LocalDB is unavailable
+            // Database will be initialized on first use
+        }
+
+        private void EnsureDbInitialized()
+        {
+            if (_isDbInitialized || _dbInitializationFailed)
+                return;
+
+            try
+            {
+                EnsureDb();
+                _isDbInitialized = true;
+            }
+            catch (SqlException ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Database initialization failed: {ex.Message}");
+                _dbInitializationFailed = true;
+                throw new InvalidOperationException("Failed to initialize database. Please ensure SQL Server LocalDB is installed and running.", ex);
+            }
+        }
+
+        private void EnsureDb()
+        {
+            var sql = @"IF OBJECT_ID('dbo.Tasks', 'U') IS NULL 
+                        CREATE TABLE dbo.Tasks(
+                            TaskId INT IDENTITY(1,1) PRIMARY KEY, 
+                            Username NVARCHAR(100) NOT NULL, 
+                            Title NVARCHAR(200) NOT NULL, 
+                            ReminderDate DATETIME NULL);";
+            using (var conn = new SqlConnection(_connectionString))
+            using (var cmd = new SqlCommand(sql, conn))
+            {
+                conn.Open();
+                cmd.ExecuteNonQuery();
+            }
+        }
+
+        // FIXED: Must take 3 arguments to match MainWindow.cs line 152
+        public void AddTask(string username, string title, DateTime? date)
+        {
+            try
+            {
+                EnsureDbInitialized();
+                const string sql = "INSERT INTO dbo.Tasks (Username, Title, ReminderDate) VALUES (@Username, @Title, @ReminderDate);";
+                using (var conn = new SqlConnection(_connectionString))
+                using (var cmd = new SqlCommand(sql, conn))
+                {
+                    cmd.Parameters.AddWithValue("@Username", username);
+                    cmd.Parameters.AddWithValue("@Title", title);
+                    cmd.Parameters.AddWithValue("@ReminderDate", (object)date ?? DBNull.Value); // Save NULL if no date
+                    conn.Open();
+                    cmd.ExecuteNonQuery();
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"AddTask failed: {ex.Message}");
+                throw;
+            }
+        }
+
+        public List<TaskItem> GetTasks(string username)
+        {
+            var list = new List<TaskItem>();
+            try
+            {
+                EnsureDbInitialized();
+                const string sql = "SELECT TaskId, Username, Title, ReminderDate FROM dbo.Tasks WHERE Username = @Username ORDER BY TaskId DESC;";
+                using (var conn = new SqlConnection(_connectionString))
+                using (var cmd = new SqlCommand(sql, conn))
+                {
+                    cmd.Parameters.AddWithValue("@Username", username);
+                    conn.Open();
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            list.Add(new TaskItem
+                            {
+                                TaskId = reader.GetInt32(0),
+                                Username = reader.GetString(1),
+                                Title = reader.GetString(2),
+                                ReminderDate = reader.IsDBNull(3) ? (DateTime?)null : reader.GetDateTime(3)
+                            });
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"GetTasks failed: {ex.Message}");
+                // Return empty list instead of throwing to allow app to continue
+                return list;
+            }
+            return list;
+        }
+
+        public void DeleteTask(int taskId)
+        {
+            try
+            {
+                EnsureDbInitialized();
+                const string sql = "DELETE FROM dbo.Tasks WHERE TaskId = @TaskId;";
+                using (var conn = new SqlConnection(_connectionString))
+                using (var cmd = new SqlCommand(sql, conn))
+                {
+                    cmd.Parameters.AddWithValue("@TaskId", taskId);
+                    conn.Open();
+                    cmd.ExecuteNonQuery();
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"DeleteTask failed: {ex.Message}");
+                throw;
+            }
+        }
+    }
+}

@@ -303,54 +303,67 @@ namespace demo
            
 
 
-            add_answers.Add("greeting i'm doing well, thanks for asking! how are you doing today ?");
-            add_answers.Add("greeting i'm great today, thanks for asking! how can i help you today ?");
-            add_answers.Add("greeting doing good! hope you are also doing well today ?");
+            add_answers.Add("How-are-you Hi'm doing well, thanks for asking! how are you doing today ?");
+            add_answers.Add("How-are-you i'm great today, thanks for asking! how can i help you today ?");
+            add_answers.Add("How-are-you I'm doing good! hope you are also doing well today ?");
+
+            add_answers.Add("Hello Hi, how are you doing today ?😊");
+            add_answers.Add("Hello Hi, how can i help you today ? 😊");
+            add_answers.Add("Hello Hi hope you are doing well today 😊");
 
 
             add_answers.Add("purpose my purpose is to educate you on how to stay safe online and guide your cybersecurity questions.");
             add_answers.Add("purpose i help users understand online safety and digital protection.");
             add_answers.Add("purpose i assist with cybersecurity awareness and safety guidance.");
 
+            //cyber security topics
 
-            add_answers.Add("cybersecurity cybersecurity is about protecting systems and networks from digital threats.");
-            add_answers.Add("cybersecurity it involves protecting devices and online accounts from attacks.");
-            add_answers.Add("cybersecurity it focuses on securing digital information and systems.");
+            add_answers.Add("Cybersecurity cybersecurity is about protecting systems and networks from digital threats.");
+            add_answers.Add("Cybersecurity it involves protecting devices and online accounts from attacks.");
+            add_answers.Add("Cybersecurity it focuses on securing digital information and systems.");
 
 
-            add_answers.Add("phishing phishing is a scam where attackers pretend to be trusted sources to steal information.");
-            add_answers.Add("phishing it uses fake messages or websites to trick users into revealing sensitive data.");
-            add_answers.Add("phishing attackers use deception to make users believe they are legitimate.");
+            add_answers.Add("Phishing phishing is a scam where attackers pretend to be trusted sources to steal information.");
+            add_answers.Add("Phishing it uses fake messages or websites to trick users into revealing sensitive data.");
+            add_answers.Add("Phishing phishing is a cyber attack that uses disguised emails to trick victims into revealing sensitive information.");
            
 
-            add_answers.Add("firewall a firewall controls network traffic based on security rules.");
-            add_answers.Add("firewall it helps block unwanted access to your device or network.");
-            add_answers.Add("firewall it acts as a protective barrier between trusted and untrusted networks.");
+            add_answers.Add("Firewall A Firewall is a network security device that monitors and filters incoming and outgoing network traffic based on an organization's previously established security policies.");
+            add_answers.Add("Firewall it helps block unwanted access to your device or network.");
+            add_answers.Add("Firewall A firewall acts as a protective barrier between trusted and untrusted networks.");
 
 
-            add_answers.Add("password a password is used to secure access to your accounts or devices.");
-            add_answers.Add("password it should be strong, long and not easy to guess.");
-            add_answers.Add("password avoid using personal details when creating one.");
+            add_answers.Add("Password a password is used to secure access to your accounts or devices.");
+            add_answers.Add("Password it should be strong, long and not easy to guess.");
+            add_answers.Add("Password avoid using personal details when creating one.");
 
 
             add_answers.Add("hacked account immediately secure your account and log out of all devices.");
             add_answers.Add("hacked account contact support if your account has been compromised.");
             add_answers.Add("hacked account enable extra security like two-factor authentication.");
 
+            add_answers.Add("2FA A 2FA or a Two-Factor Authentication is a security method requiring two forms of verification (password + code).");
+            add_answers.Add("2FA Logging into Gmail with a password and SMS code is an example of 2FA");
+            add_answers.Add("2FA Enable 2FA on all accounts to reduce risk of unauthorized access.It enables extra security.");
 
-            add_answers.Add("fraud contact your bank immediately if fraud is detected.");
-            add_answers.Add("fraud report suspicious financial activity to the authorities.");
-            add_answers.Add("fraud monitor your accounts for unusual activity.");
-
-
-            add_answers.Add("malicious chatbot malicious bots often create urgency to trick users.");
-            add_answers.Add("malicious chatbot fake chatbots may ask for sensitive information.");
-            add_answers.Add("malicious chatbot be cautious if a bot pressures you for personal data.");
+            add_answers.Add("IDS An IDS or Intrusion Detection System is a cybersecurity tool that continuously monitors network or system activity to detect suspicious behavior, policy violations, or potential intrusions.");
+            add_answers.Add("IDS  IDS is essentially a digital alarm system for networks. For example, An IDS alerting administrators when multiple failed login attempts occur on a server. ");
+            add_answers.Add("IDS Regularly update detection rules and signatures to catch new threats.Train staff to respond quickly to IDS alerts to prevent escalation into full-blown incidents.");
 
 
-            add_answers.Add("vpn a vpn helps protect your privacy on public wi-fi.");
-            add_answers.Add("vpn it encrypts your internet traffic for safety.");
-            add_answers.Add("vpn it improves security when using public networks.");
+            add_answers.Add("Ransomware Ransomware is a type of malware that encrypts a victim's files. The attacker then demands a payment (ransom) to restore access.");
+            add_answers.Add("Ransomware  AN example is a WannaCry attack that encrypted hospital data — ransomware is digital extortion.");
+            add_answers.Add("Ransomware To avoid this back up data regularly, don’t pay attackers, and patch vulnerabilities.");
+
+
+            add_answers.Add("Malware  malware is malicious software designed to damage, disrupt, or steal data from computers.");
+            add_answers.Add("Malware A virus that deletes files is an example of malware. It is harmful software.");
+            add_answers.Add("Malware To avoid it use antivirus software, keep systems updated, and avoid downloading from untrusted sites.");
+
+
+            add_answers.Add("VPN (Virtual Private Network) or a vpn extends a private network across a public network, allowing users to send and receive data across shared or public networks as if their computing devices were directly connected to the private network.");
+            add_answers.Add("VPN you can use a (Virtual Private Network) to safely browse on public Wi-Fi because it is a privacy shield for internet use.it encrypts your internet traffic for safety.");
+            add_answers.Add("VPN (Virtual Private Network) it improves security when using public networks.");
 
             // Thanks & Bye
             add_answers.Add("thanks You're welcome! Glad I could help.");
@@ -370,18 +383,18 @@ namespace demo
             add_answers.Add("frustrated I get that it's frustrating. Tech stuff can be annoying. Let's break it down step by step.");
 
             // Confused
-            add_answers.Add("confused No stress. Cybersecurity loves jargon. I’ll explain it like you’re 12.");
+            add_answers.Add("confused No wrong answer here. Just tell me where it’s messy in your head and we’ll untangle it together, one piece at a time.I’m not going anywhere 💙.");
             add_answers.Add("confused Happens to everyone. Point me to the part that doesn’t make sense.");
             add_answers.Add("confused No worries, confusion is normal with this stuff. I'll explain it without the jargon.");
 
             // Worried
-            add_answers.Add("worried It’s smart to be cautious online. Most risks drop a lot with basic habits.");
-            add_answers.Add("worried You’re not alone in feeling that way. What specifically are you worried about?");
+            add_answers.Add("worried Ncooh come here 🤗 I got you Its okay to be worried.Most risks drop a lot with basic habits.");
+            add_answers.Add("worried Ncooh do'nt worry. It’s smart to be cautious online. Can you tell me what’s worrying you? Is it stress? Or marks? Or family? Or something else entirely?");
             add_answers.Add("worried It's okay to worry — cyber stuff can feel scary. Most issues are fixable though. What's going on?");
 
             // Happy
             add_answers.Add("happy Love to hear it! Good mood makes learning easier.");
-            add_answers.Add("happy That’s great! Pass some of that energy over here.");
+            add_answers.Add("happy I’m so glad you’re happy now. You deserve that feeling. Pass some of that energy over here.");
             add_answers.Add("happy That's awesome to hear! Glad you're doing well.");
 
             // Sad
@@ -390,9 +403,9 @@ namespace demo
             add_answers.Add("sad I'm sorry you're feeling down. I'm here if you want to talk or need a distraction.");
 
             // Angry
-            add_answers.Add("angry Totally valid. Scams and hacks are infuriating. Let’s see what we can do.");
-            add_answers.Add("angry I get it. Let’s turn that anger into making your setup safer.");
-            add_answers.Add("angry Fair enough, being angry makes sense. Let's tackle whatever's bugging you.");
+            add_answers.Add("angry Ncooh 🤗 I got you. Scams and hacks are infuriating. Let’s see what we can do.");
+            add_answers.Add("angry Ncooh thats okay. Wanna vent it out? Let’s turn that anger into making your setup safer.");
+            add_answers.Add("angry What’s making you angry right now? I’m listening. No judgment here. Scream into the chat if you need to. I can take it 😤");
 
 
 
